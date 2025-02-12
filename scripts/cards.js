@@ -1,26 +1,26 @@
 const initialCards = [
     {
-      name: "Архыз",
-      link: "https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg",
+      name: "Перу",
+      link: ".//images/willian-justen-de-vasconcellos-4hMET7vYTAQ-unsplash (1).jpg",
     },
     {
-      name: "Челябинская область",
-      link: "https://pictures.s3.yandex.net/frontend-developer/cards-compressed/chelyabinsk-oblast.jpg",
+      name: "Санкт-Петербург",
+      link: ".//images/evg-klimov-qMEsbgLSXVo-unsplash (1).jpg",
     },
     {
-      name: "Иваново",
-      link: "https://pictures.s3.yandex.net/frontend-developer/cards-compressed/ivanovo.jpg",
+      name: "Токио",
+      link: ".//images/manuel-cosentino-pHPDs0xoBVE-unsplash (1).jpg",
     },
     {
-      name: "Камчатка",
-      link: "https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kamchatka.jpg",
+      name: "Прага",
+      link: ".//images/valya-polishchuk-yUVlVXEw370-unsplash (1).jpg",
     },
     {
-      name: "Холмогорский район",
-      link: "https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kholmogorsky-rayon.jpg",
+      name: "Гавайи",
+      link: ".//images/vishnu-tadimeti-DFbhalEBaJg-unsplash (1).jpg",
     },
     {
-      name: "Байкал",
-      link: "https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg",
+      name: "Египет",
+      link: ".//images/simon-berger-boyXZfqpwpU-unsplash (1).jpg",
     }
 ];
