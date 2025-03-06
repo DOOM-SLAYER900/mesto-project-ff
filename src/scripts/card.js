@@ -1,8 +1,5 @@
-import { initialCards } from "./cards.js";
-import { popupImage, openImagePopup } from "./modal.js";
+import { cardTemplate, popupImage } from "./index.js"
 
-export const cardTemplate = document.querySelector("#card-template").content;
-export const cardList = document.querySelector(".places__list");
 
 export function createCard(cardElement, func, func2, func3) {
   const cardItem = cardTemplate.querySelector(".card").cloneNode(true);
@@ -34,8 +31,4 @@ export function deleteFunc(cardForRemove) {
 
 export function likeFunc(like) {
   like.classList.toggle("card__like-button_is-active");
-}
-
-initialCards.forEach(function addCard(cardValue) {
-  cardList.append(createCard(cardValue, deleteFunc, likeFunc, openImagePopup));
-});
+};

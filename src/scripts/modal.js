@@ -1,22 +1,23 @@
-import { cardList, createCard, deleteFunc, likeFunc } from "./card.js";
-const popupProfileEdit = document.querySelector(".popup_type_edit");
-const popupNewCard = document.querySelector(".popup_type_new-card");
-export const popupImage = document.querySelector(".popup_type_image");
+import { createCard, deleteFunc, likeFunc } from "./card.js";
+import {
+  cardList,
+  popupProfileEdit,
+  popupNewCard,
+  editProfileForm,
+  editProfileName,
+  editProfileDescription,
+  createCardForm,
+  createCardName,
+  createCardLink,
+  profileName,
+  profileDescription,
+} from "./index.js";
 
-const buttonProfileEdit = document.querySelector(".profile__edit-button");
-const buttonNewCard = document.querySelector(".profile__add-button");
-
-const editProfileForm = document.forms.editProfile;
-const editProfileName = editProfileForm.elements.name;
-const editProfileDescription = editProfileForm.elements.description;
-const createCardForm = document.forms.newPlace;
-const createCardName = createCardForm.elements.placeName;
-const createCardLink = createCardForm.elements.link;
-
-const profileName = document.querySelector(".profile__title");
-const profileDescription = document.querySelector(".profile__description");
-
-function openPopup(popup) {
+export function openPopup(popup) {
+  if (popup === popupProfileEdit) {
+    editProfileName.value = profileName.textContent;
+    editProfileDescription.value = profileDescription.textContent;
+  };
   popup.classList.add("popup_is-opened");
   document.addEventListener("keydown", function (evt) {
     if (evt.key === "Escape") {
@@ -39,14 +40,14 @@ export function openImagePopup(popup, src, alt, title) {
   });
 }
 
-function closePopup(evt) {
+export function closePopup(evt) {
   const buttonClosingPopup = evt.currentTarget.querySelector(".popup__close");
   if (evt.target === buttonClosingPopup || evt.target === evt.currentTarget) {
     evt.currentTarget.classList.remove("popup_is-opened");
   }
 }
 
-function submitProfileEditing(evt) {
+export function submitProfileEditing(evt) {
   evt.preventDefault();
   const NewProfileName = editProfileName.value;
   const NewProfileDescription = editProfileDescription.value;
@@ -56,7 +57,7 @@ function submitProfileEditing(evt) {
   editProfileForm.reset();
 }
 
-function submitCardCreate(evt) {
+export function submitCardCreate(evt) {
   evt.preventDefault();
   const cardName = createCardName.value;
   const imageLink = createCardLink.value;
@@ -67,23 +68,3 @@ function submitCardCreate(evt) {
   popupNewCard.classList.remove("popup_is-opened");
   createCardForm.reset();
 }
-
-buttonProfileEdit.addEventListener("click", function () {
-  openPopup(popupProfileEdit);
-});
-popupProfileEdit.addEventListener("click", function (evt) {
-  closePopup(evt);
-});
-editProfileForm.addEventListener("submit", submitProfileEditing);
-
-buttonNewCard.addEventListener("click", function () {
-  openPopup(popupNewCard);
-});
-popupNewCard.addEventListener("click", function (evt) {
-  closePopup(evt);
-});
-createCardForm.addEventListener("submit", submitCardCreate);
-
-popupImage.addEventListener("click", function (evt) {
-  closePopup(evt);
-});
