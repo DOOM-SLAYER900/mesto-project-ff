@@ -1,26 +1,28 @@
-import { cardTemplate, popupImage } from "./index.js"
+import { popupImage } from "./index.js"
+
+export const cardTemplate = document.querySelector("#card-template").content;
 
 
-export function createCard(cardElement, func, func2, func3) {
+export function createCard(newCardValue, delFunc, likeFunc, openPopupFunc) {
   const cardItem = cardTemplate.querySelector(".card").cloneNode(true);
   const cardImageSrc = (cardItem.querySelector(".card__image").src =
-    cardElement.link);
+    newCardValue.link);
   const cardImageAlt = (cardItem.querySelector(".card__image").alt =
-    cardElement.name);
+    newCardValue.name);
   const cardTitle = (cardItem.querySelector(".card__title").textContent =
-    cardElement.name);
+    newCardValue.name);
   const deleteButton = cardItem
     .querySelector(".card__delete-button")
-    .addEventListener("click", () => func(cardItem));
+    .addEventListener("click", () => delFunc(cardItem));
   const likeButton = cardItem
     .querySelector(".card__like-button")
     .addEventListener("click", function (evt) {
-      func2(evt.target);
+      likeFunc(evt.target);
     });
   const cardImage = cardItem
     .querySelector(".card__image")
     .addEventListener("click", function () {
-      func3(popupImage, cardImageSrc, cardImageAlt, cardTitle);
+      openPopupFunc(popupImage, cardImageSrc, cardImageAlt, cardTitle);
     });
   return cardItem;
 }
