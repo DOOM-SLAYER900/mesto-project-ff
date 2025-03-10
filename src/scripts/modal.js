@@ -1,4 +1,4 @@
-export function closeOnEscape(evt){
+export function closeOnEscape(evt) {
   if (evt.key === "Escape") {
     const openedpopup = document.querySelector(".popup_is-opened");
     openedpopup.classList.remove("popup_is-opened");
@@ -12,7 +12,6 @@ export function openPopup(popup) {
 };
 
 export function closePopup(evt) {
-    evt.classList.remove("popup_is-opened");
-    document.removeEventListener("keydown", closeOnEscape);
+  evt.classList.remove("popup_is-opened");
+  document.removeEventListener("keydown", closeOnEscape);
 };
-

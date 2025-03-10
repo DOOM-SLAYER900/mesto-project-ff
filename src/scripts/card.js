@@ -1,7 +1,4 @@
-import { popupImage } from "./index.js"
-
 export const cardTemplate = document.querySelector("#card-template").content;
-
 
 export function createCard(newCardValue, delFunc, likeFunc, openPopupFunc) {
   const cardItem = cardTemplate.querySelector(".card").cloneNode(true);
@@ -22,10 +19,10 @@ export function createCard(newCardValue, delFunc, likeFunc, openPopupFunc) {
   const cardImage = cardItem
     .querySelector(".card__image")
     .addEventListener("click", function () {
-      openPopupFunc(popupImage, cardImageSrc, cardImageAlt, cardTitle);
+      openPopupFunc(cardImageSrc, cardImageAlt, cardTitle);
     });
   return cardItem;
-}
+};
 
 export function deleteFunc(cardForRemove) {
   cardForRemove.remove();

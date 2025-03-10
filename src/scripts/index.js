@@ -1,9 +1,6 @@
 import { initialCards } from "./cards.js";
 import { createCard, deleteFunc, likeFunc } from "./card.js";
-import {
-  openPopup,
-  closePopup,
-} from "./modal.js";
+import { openPopup, closePopup } from "./modal.js";
 import "../pages/index.css";
 
 export const cardList = document.querySelector(".places__list");
@@ -11,7 +8,7 @@ export const cardList = document.querySelector(".places__list");
 export const popupProfileEdit = document.querySelector(".popup_type_edit");
 export const popupNewCard = document.querySelector(".popup_type_new-card");
 export const popupImage = document.querySelector(".popup_type_image");
-export const popups = document.querySelectorAll('.popup');
+export const popups = document.querySelectorAll(".popup");
 
 export const buttonProfileEdit = document.querySelector(
   ".profile__edit-button"
@@ -30,14 +27,14 @@ export const profileDescription = document.querySelector(
   ".profile__description"
 );
 
-function openImagePopup(popup, src, alt, title) {
-  const imageInPopup = popup.querySelector(".popup__image");
-  const imageTitle = popup.querySelector(".popup__caption");
-  openPopup(popup);
+function openImagePopup(src, alt, title) {
+  const imageInPopup = popupImage.querySelector(".popup__image");
+  const imageTitle = popupImage.querySelector(".popup__caption");
+  openPopup(popupImage);
   imageInPopup.src = src;
   imageInPopup.alt = alt;
   imageTitle.textContent = title;
-};
+}
 
 function submitProfileEditing(evt) {
   evt.preventDefault();
@@ -47,7 +44,7 @@ function submitProfileEditing(evt) {
   profileDescription.textContent = NewProfileDescription;
   closePopup(popupProfileEdit);
   editProfileForm.reset();
-};
+}
 
 function submitCardCreate(evt) {
   evt.preventDefault();
@@ -59,7 +56,7 @@ function submitCardCreate(evt) {
   );
   closePopup(popupNewCard);
   createCardForm.reset();
-};
+}
 
 initialCards.forEach(function addCard(cardValue) {
   cardList.append(createCard(cardValue, deleteFunc, likeFunc, openImagePopup));
@@ -78,12 +75,12 @@ buttonNewCard.addEventListener("click", function () {
 createCardForm.addEventListener("submit", submitCardCreate);
 
 popups.forEach((openPopup) => {
-  openPopup.addEventListener('mousedown', (evt) => {
-      if (evt.target.classList.contains('popup_is-opened')) {
-          closePopup(openPopup)
-      }
-      if (evt.target.classList.contains('popup__close')) {
-        closePopup(openPopup)
-      }
-  })
+  openPopup.addEventListener("mousedown", (evt) => {
+    if (evt.target.classList.contains("popup_is-opened")) {
+      closePopup(openPopup);
+    }
+    if (evt.target.classList.contains("popup__close")) {
+      closePopup(openPopup);
+    }
+  });
 });
