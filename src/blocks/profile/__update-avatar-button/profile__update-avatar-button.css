@@ -1,0 +1,21 @@
+.profile__update-avatar-button {
+  position: absolute;
+  width: 120px;
+  height: 120px;
+  padding: 0;
+  background: transparent url('../../../images/edit-icon.svg') center no-repeat;
+  background-size: 24px 24px;
+  border: none;
+  cursor: pointer;
+  margin: auto;
+  -webkit-transition: 0.3s;
+  -moz-transition: 0.3s;
+  -ms-transition: 0.3s;
+  -o-transition: 0.3s;
+  transition: 0.3s;
+  opacity: 0;
+}
+
+.profile__image:hover .profile__update-avatar-button {
+  opacity: 1;
+}

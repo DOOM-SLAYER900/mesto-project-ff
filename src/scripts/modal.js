@@ -4,14 +4,14 @@ export function closeOnEscape(evt) {
     openedpopup.classList.remove("popup_is-opened");
     document.removeEventListener("keydown", closeOnEscape);
   }
-};
+}
 
 export function openPopup(popup) {
   popup.classList.add("popup_is-opened");
   document.addEventListener("keydown", closeOnEscape);
-};
+}
 
 export function closePopup(evt) {
   evt.classList.remove("popup_is-opened");
   document.removeEventListener("keydown", closeOnEscape);
-};
+}
