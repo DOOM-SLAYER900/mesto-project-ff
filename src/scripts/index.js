@@ -2,15 +2,14 @@ import { createCard, deleteFunc, likeFunc } from "./card.js";
 import { openPopup, closePopup } from "./modal.js";
 import { enableValidation, clearValidation } from "./validation.js";
 import {
-  profileData,
+  getProfileData,
   serverProfileEditing,
   serverAvatarUpdate,
-  initialServerCards,
-  serverProfileData,
   postNewCard,
   deleteServerCard,
   putLike,
   deleteLike,
+  getInitialCards,
 } from "./api.js";
 import "../pages/index.css";
 
@@ -46,7 +45,19 @@ export const profileDescription = document.querySelector(
   ".profile__description"
 );
 export const profileImage = document.querySelector(".profile__image");
-export let userIdNewCard = null;
+export let currentUser = null;
+export const logError = (error) => {
+  console.error("Ошибка:", error);
+};
+export const validationConfig = {
+  formSelector: ".popup__form",
+  inputSelector: ".popup__input",
+  submitButtonSelector: ".popup__button",
+  inactiveButtonClass: "popup__button_disabled",
+  inputErrorClass: "popup__input_type_error",
+  errorClass: "popup__error_visible",
+  spanErrorClass: ".popup__input-error",
+};
 
 function openImagePopup(src, alt, title) {
   const imageInPopup = popupImage.querySelector(".popup__image");
@@ -61,9 +72,13 @@ function submitAvatarUpdate(evt) {
   evt.preventDefault();
   const submitButton = evt.target.querySelector(".popup__button");
   submitButton.textContent = "Сохранение...";
-  const NewAvatarLink = updateAvatarLink.value;
-  profileImage.style.backgroundImage = `url(${NewAvatarLink})`;
-  serverAvatarUpdate(NewAvatarLink, submitButton);
+  const newAvatarLink = updateAvatarLink.value;
+  profileImage.style.backgroundImage = `url(${newAvatarLink})`;
+  serverAvatarUpdate(newAvatarLink)
+    .catch(logError)
+    .finally(() => {
+      submitButton.textContent = "Сохранить";
+    });
   updateAvatarForm.reset();
   closePopup(popupUpdateAvatar);
 }
@@ -72,17 +87,20 @@ function submitProfileEditing(evt) {
   evt.preventDefault();
   const submitButton = evt.target.querySelector(".popup__button");
   submitButton.textContent = "Сохранение...";
-  const NewProfileName = editProfileName.value;
-  const NewProfileDescription = editProfileDescription.value;
-  const NewProfileValue = {
-    name: NewProfileName,
-    about: NewProfileDescription,
+  const newProfileName = editProfileName.value;
+  const newProfileDescription = editProfileDescription.value;
+  const newProfileValue = {
+    name: newProfileName,
+    about: newProfileDescription,
   };
-  profileName.textContent = NewProfileName;
-  profileDescription.textContent = NewProfileDescription;
-  serverProfileEditing(NewProfileValue, submitButton);
+  profileName.textContent = newProfileName;
+  profileDescription.textContent = newProfileDescription;
+  serverProfileEditing(newProfileValue)
+    .catch(logError)
+    .finally(() => {
+      submitButton.textContent = "Сохранить";
+    });
   closePopup(popupProfileEdit);
-
 }
 
 function submitCardCreate(evt) {
@@ -92,17 +110,16 @@ function submitCardCreate(evt) {
   const cardName = createCardName.value;
   const imageLink = createCardLink.value;
   const newCardValue = { name: cardName, link: imageLink };
-  Promise.all([serverProfileData, postNewCard(newCardValue)])
-    .then(([profileInfo, card]) => {
+  postNewCard(newCardValue)
+    .then((card) => {
       const cardValue = card;
-      console.log(cardValue);
       cardList.prepend(
         createCard(
           cardValue,
           likeFunc,
           openImagePopup,
           deleteFunc,
-          profileInfo,
+          currentUser,
           deleteServerCard,
           putLike,
           deleteLike
@@ -111,15 +128,15 @@ function submitCardCreate(evt) {
       createCardForm.reset();
       closePopup(popupNewCard);
     })
-    .catch((error) => {
-      console.error("Ошибка:", error);
-    })
+    .catch(logError)
     .finally(() => {
       submitButton.textContent = "Сохранить";
     });
 }
 
 buttonpUpdateAvatar.addEventListener("click", function () {
+  const form = popupUpdateAvatar.querySelector(validationConfig.formSelector);
+  clearValidation(validationConfig, form);
   openPopup(popupUpdateAvatar);
 });
 updateAvatarForm.addEventListener("submit", submitAvatarUpdate);
@@ -132,35 +149,35 @@ buttonProfileEdit.addEventListener("click", function () {
 editProfileForm.addEventListener("submit", submitProfileEditing);
 
 buttonNewCard.addEventListener("click", function () {
+  const form = popupUpdateAvatar.querySelector(validationConfig.formSelector);
+  clearValidation(validationConfig, form);
   openPopup(popupNewCard);
 });
 createCardForm.addEventListener("submit", submitCardCreate);
 
 popups.forEach((openPopup) => {
   openPopup.addEventListener("mousedown", (evt) => {
-    if (evt.target.classList.contains("popup_is-opened")) {
-      clearValidation(openPopup);
+    if (
+      evt.target.classList.contains("popup_is-opened") ||
+      evt.target.classList.contains("popup__close")
+    ) {
       closePopup(openPopup);
-    }
-    if (evt.target.classList.contains("popup__close")) {
-      clearValidation(openPopup);
-      closePopup(openPopup);
+      if (openPopup.querySelector(validationConfig.formSelector)) {
+        const form = openPopup.querySelector(validationConfig.formSelector);
+        clearValidation(validationConfig, form);
+      }
     }
   });
 });
 
-enableValidation({
-  formSelector: ".popup__form",
-  inputSelector: ".popup__input",
-  submitButtonSelector: ".popup__button",
-  inactiveButtonClass: "popup__button_disabled",
-  inputErrorClass: "popup__input_type_error",
-  errorClass: "popup__error_visible",
-});
-profileData(profileName, profileImage, profileDescription);
+enableValidation(validationConfig);
 
-Promise.all([serverProfileData, initialServerCards]).then(
-  ([profileInfo, cards]) => {
+Promise.all([getProfileData, getInitialCards])
+  .then(([profileInfo, cards]) => {
+    profileName.textContent = profileInfo.name;
+    profileDescription.textContent = profileInfo.about;
+    profileImage.style.backgroundImage = `url(${profileInfo.avatar})`;
+    currentUser = profileInfo;
     cards.forEach(function addCard(cardValue) {
       cardList.append(
         createCard(
@@ -168,12 +185,12 @@ Promise.all([serverProfileData, initialServerCards]).then(
           likeFunc,
           openImagePopup,
           deleteFunc,
-          profileInfo,
+          currentUser,
           deleteServerCard,
           putLike,
           deleteLike
         )
       );
     });
-  }
-);
+  })
+  .catch(logError);
