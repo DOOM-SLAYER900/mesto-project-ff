@@ -67,13 +67,8 @@ const toggleButtonState = (inputList, button, config) => {
 export function clearValidation(config, form) {
   const inputList = Array.from(form.querySelectorAll(config.inputSelector));
   const button = form.querySelector(config.submitButtonSelector);
-  const AllspanError = form.querySelectorAll(config.spanErrorClass);
   inputList.forEach((input) => {
     hideInputError(form, input, config);
-  });
-  AllspanError.forEach((errorElement) => {
-    errorElement.classList.remove(config.errorClass);
-    errorElement.textContent = "";
   });
   toggleButtonState(inputList, button, config);
   form.reset();
